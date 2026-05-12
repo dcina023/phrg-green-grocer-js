@@ -61,17 +61,18 @@ const applyCoupons = (cart, coupons) => {
     console.log("ITEM COPY")
     console.log(itemCopy)
     for(const coupon of coupons) {
-      if(coupon["item"] === Object.keys(itemCopy)[0] && itemCopy[Object.keys(itemCopy)[0]]["count"] >= coupon["num"]) {
-        itemCopy[Object.keys(itemCopy)[0]]["price"] = coupon.price
-        itemCopy[Object.keys(itemCopy)[0]]["count"] = 1
-        itemCopy[Object.keys(itemCopy)[0]] += "W/COUPON"
-        grocery[Object.keys(grocery)[0]]["count"] -= coupon.num
+      if(coupon["item"] === grocery && itemCopy["count"] >= coupon["num"]) {
+        itemCopy["price"] = coupon.cost
+        itemCopy["count"] = (itemCopy["count"] || 0) + 1
+        tempCart[grocery]["count"] -= coupon.num
+        tempCart[grocery + " W/COUPON"] = itemCopy
       }
     }    
   }
 
   console.log("TEMP CART")
   console.log(tempCart)
+  return tempCart
 }
 
 const applyClearance = (cart) =>{
