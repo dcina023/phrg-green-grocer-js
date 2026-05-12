@@ -1,40 +1,34 @@
 const consolidateCart = (cart) => {
   // code here
-console.log("CART:")
-console.log(cart)
+// console.log("CART:")
+// console.log(cart)
 
-const consildatedCart = []
+const consolidatedCart = {}
 
 const counts = cart.reduce((acc, item) => {
   acc[Object.keys(item)[0]] = (acc[Object.keys(item)[0]] || 0) + 1;
   return acc;
 }, {});
-console.log("COUNT:")
-console.log(counts)
-console.log("-----------")
 
 for(const item in counts) {
   //console.log("counts loop")
   for(let j = 0; j < cart.length; j++) {
-    // console.log("!FOUND! Comparison Loop")
-    // console.log(item)
-    // console.log(Object.keys(cart[j])[0])
     if(item === Object.keys(cart[j])[0]) {
-      //console.log("!FOUND! THIS WORKED")
       let obj = {...cart[j]}
-      //console.log("obj[item]")
-      //console.log(obj[item])
       obj[item]["count"] = counts[item]
-      consildatedCart.push(obj)
+      consolidatedCart[item] = {  
+          ...cart[j][item],  
+          count: counts[item]        
+        }
       break;
     }
   }
 }
 
 console.log("CONSOLIDATED CART:")
-console.log(consildatedCart)
+console.log(consolidatedCart)
 
-cart = consildatedCart
+return consolidatedCart
 /* AVERT YOUR EYES ! BAD CODE BELOW */
   // for(let i = 0;i < cart.length; i++) {
   //   for(let z = i+1;z < cart.length; z++) {
@@ -59,6 +53,25 @@ cart = consildatedCart
 
 const applyCoupons = (cart, coupons) => {
   // code here
+  console.log("COUPONS")
+  console.log(coupons)
+  const tempCart = {...cart}
+  for(const grocery in tempCart) {
+    let itemCopy = {...tempCart[grocery]}
+    console.log("ITEM COPY")
+    console.log(itemCopy)
+    for(const coupon of coupons) {
+      if(coupon["item"] === Object.keys(itemCopy)[0] && itemCopy[Object.keys(itemCopy)[0]]["count"] >= coupon["num"]) {
+        itemCopy[Object.keys(itemCopy)[0]]["price"] = coupon.price
+        itemCopy[Object.keys(itemCopy)[0]]["count"] = 1
+        itemCopy[Object.keys(itemCopy)[0]] += "W/COUPON"
+        grocery[Object.keys(grocery)[0]]["count"] -= coupon.num
+      }
+    }    
+  }
+
+  console.log("TEMP CART")
+  console.log(tempCart)
 }
 
 const applyClearance = (cart) =>{
