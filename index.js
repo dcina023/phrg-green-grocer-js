@@ -1,18 +1,14 @@
 const consolidateCart = (cart) => {
-  // code here
-// console.log("CART:")
-// console.log(cart)
 
 const consolidatedCart = {}
 
-const counts = cart.reduce((acc, item) => {
-  acc[Object.keys(item)[0]] = (acc[Object.keys(item)[0]] || 0) + 1;
-  return acc;
+const counts = cart.reduce((acc, item) => {  // Creates a tally of each item in the cart array
+  acc[Object.keys(item)[0]] = (acc[Object.keys(item)[0]] || 0) + 1;  //Checks if the key-value pair exists, otherwise start at 0, then add 1
+  return acc; //return the accumulator (acc)
 }, {});
 
 for(const item in counts) {
-  //console.log("counts loop")
-  for(let j = 0; j < cart.length; j++) {
+  for(let j = 0; j < cart.length; j++) { //for j in cart
     if(item === Object.keys(cart[j])[0]) {
       let obj = {...cart[j]}
       obj[item]["count"] = counts[item]
@@ -29,26 +25,6 @@ console.log("CONSOLIDATED CART:")
 console.log(consolidatedCart)
 
 return consolidatedCart
-/* AVERT YOUR EYES ! BAD CODE BELOW */
-  // for(let i = 0;i < cart.length; i++) {
-  //   for(let z = i+1;z < cart.length; z++) {
-
-  //     console.log(cart[i])
-  //     console.log(cart[z])
-  //     console.log("---------------------------------")
-  //     if(cart[i] === cart[z] && ()) {
-  //       if(cart[i].count !== undefined) {
-  //         cart[i][0].count++
-  //         cart[z].consolidated = true
-  //       } else {
-  //         cart[i][0].count = 2
-  //         cart[z].consolidated = true
-  //       }
-  //       console.log("COUNT:")
-  //       console.log(cart[i].count)
-  //     }
-  //   }
-  // }
 }
 
 const applyCoupons = (cart, coupons) => {
@@ -91,4 +67,19 @@ const applyClearance = (cart) =>{
 
 const checkout = (cart, coupons) => {
   // code here
+  let newCart = consolidateCart(cart)
+  newCart = applyCoupons(newCart, coupons)
+  newCart = applyClearance(newCart)
+
+
+  let total = 0
+  for(const item in newCart) {
+    total += newCart[item].count * newCart[item].price
+  }
+
+  if(total > 100) {
+    return total * 0.9
+  } else {
+    return total
+  }
 }
