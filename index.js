@@ -57,16 +57,23 @@ const applyCoupons = (cart, coupons) => {
   console.log(coupons)
   const tempCart = {...cart}
   for(const grocery in tempCart) {
-    let itemCopy = {...tempCart[grocery]}
-    console.log("ITEM COPY")
-    console.log(itemCopy)
     for(const coupon of coupons) {
-      if(coupon["item"] === grocery && itemCopy["count"] >= coupon["num"]) {
-        itemCopy["price"] = coupon.cost
-        itemCopy["count"] = (itemCopy["count"] || 0) + 1
-        tempCart[grocery]["count"] -= coupon.num
-        tempCart[grocery + " W/COUPON"] = itemCopy
+    let itemCopy = { ...tempCart[grocery] };
+    if (coupon["item"] === grocery && itemCopy["count"] >= coupon["num"]) {
+      itemCopy["price"] = coupon.cost;
+      if (tempCart[grocery + " W/COUPON"] !== undefined) {
+        itemCopy["count"] = tempCart[grocery + " W/COUPON"]["count"] + 1;
+        console.log("did this");
+      } else {
+        itemCopy["count"] = 1;
+        console.log("did that");
       }
+
+      console.log("item copy");
+      console.log(itemCopy);
+      tempCart[grocery]["count"] -= coupon.num;
+      tempCart[grocery + " W/COUPON"] = itemCopy;
+    }
     }    
   }
 
