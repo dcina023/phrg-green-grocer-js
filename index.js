@@ -53,8 +53,6 @@ return consolidatedCart
 
 const applyCoupons = (cart, coupons) => {
   // code here
-  console.log("COUPONS")
-  console.log(coupons)
   const tempCart = {...cart}
   for(const grocery in tempCart) {
     for(const coupon of coupons) {
@@ -63,14 +61,10 @@ const applyCoupons = (cart, coupons) => {
       itemCopy["price"] = coupon.cost;
       if (tempCart[grocery + " W/COUPON"] !== undefined) {
         itemCopy["count"] = tempCart[grocery + " W/COUPON"]["count"] + 1;
-        console.log("did this");
       } else {
         itemCopy["count"] = 1;
-        console.log("did that");
       }
 
-      console.log("item copy");
-      console.log(itemCopy);
       tempCart[grocery]["count"] -= coupon.num;
       tempCart[grocery + " W/COUPON"] = itemCopy;
     }
@@ -84,6 +78,15 @@ const applyCoupons = (cart, coupons) => {
 
 const applyClearance = (cart) =>{
   // code here
+  const tempCart = {...cart}
+
+  for(const grocery in tempCart) {
+    if(tempCart[grocery].clearance) {
+      tempCart[grocery].price = +(tempCart[grocery].price * 0.8).toFixed(2)
+    }
+  }
+
+  return tempCart
 }
 
 const checkout = (cart, coupons) => {
